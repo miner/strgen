@@ -1,2 +1,14 @@
 # strgen
-Generate strings from regular expressions, for use with Clojure test.check and spec
+
+A Clojure library WITH YOUR DESCRIPTION.
+
+## Usage
+
+FIXME
+
+## License
+
+Copyright © 2016 YOUR NAME
+
+Distributed under the Eclipse Public License, same as Clojure.
+
