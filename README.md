@@ -24,7 +24,9 @@ The clojure.spec library is new in Clojure 1.9, currently available as a pre-rel
 	(s/exercise (s/with-gen (s/spec (s/and string? #(re-matches re %)))
                          #(sg/string-generator re))))
 
-;;=> (["fo" "fo"] ["fobar" "fobar"] ["fo" "fo"] ["foo" "foo"] ["foooo" "foooo"] ["fooo" "fooo"] ["fo" "fo"] ["foobar" "foobar"] ["fooooobar" "fooooobar"] ["fooooobar" "fooooobar"])
+;;=> (["fo" "fo"] ["fobar" "fobar"] ["fo" "fo"] ["foo" "foo"] ["foooo" "foooo"] 
+["fooo" "fooo"] ["fo" "fo"] ["foobar" "foobar"] ["fooooobar" "fooooobar"] 
+["fooooobar" "fooooobar"])
 
 ```
  
