@@ -7,8 +7,6 @@
 ;; Hacked on since then to add ^$ and {N,M}
 ;; and maybe a bit faster in producing final string
 
-;; Crazy idea:  Maybe instaparse could parse the regex for us???
-
 
 ;; Minimal regex features
 ;; *?+ . [abc] [a-z] [^a] \n (a|b) \w \W \d \D \s \S
@@ -21,6 +19,12 @@
 ;; Try test.chuck for a better string-from-regex-generator, but it has some dependecies that
 ;; will not allow it to be used in a contrib library (which is on the roadmap for Herbert).
 ;; https://github.com/gfredericks/test.chuck
+
+;; For regex * + {N,} there is technically no limit to how many items might match "or
+;; more".  For purposes of generating strings, we limit the or-more items to
+;; *or-more-limit*.
+
+(def ^:dynamic *or-more-limit* 9)
 
 
 (declare parse-chars)
@@ -67,20 +71,18 @@
 ;; parse {N,M} where { is already consumed
 ;; but ,M is optional
 ;; very subtle distinction between exactly {N} no comma, and N-or-more {N,}
-;; For purposes of gen, we cap unspecified N-or-more at (+ N 9)
+;; For purposes of gen, we cap unspecified N-or-more at (+ N *or-more-limit*)
 
-
-(let [unspecified-cap 9]
-  ;; returns vector of [N, M (possibly nil), rest-of-cs]
-  (defn parse-times [cs]
-    (loop [digits [] n nil comma false cs cs]
-      (case (first cs)
-        \} (if n
-             [n (when comma (or (read-digits digits) (+ n unspecified-cap))) (rest cs)]
-             [(read-digits digits) nil (rest cs)])
-        \space (recur digits n comma (rest cs))
-        \, (recur [] (read-digits digits) true (rest cs))
-        (\0 \1 \2 \3 \4 \5 \6 \7 \8 \9) (recur (conj digits (first cs)) n comma (rest cs))))))
+;; returns vector of [N, M (possibly nil), rest-of-cs]
+(defn parse-times [cs]
+  (loop [digits [] n nil comma false cs cs]
+    (case (first cs)
+      \} (if n
+           [n (when comma (or (read-digits digits) (+ n *or-more-limit*))) (rest cs)]
+           [(read-digits digits) nil (rest cs)])
+      \space (recur digits n comma (rest cs))
+      \, (recur [] (read-digits digits) true (rest cs))
+      (\0 \1 \2 \3 \4 \5 \6 \7 \8 \9) (recur (conj digits (first cs)) n comma (rest cs)))))
 
 
 (defn parse-chars
@@ -182,8 +184,9 @@
              ;; nil m means exactly N
              (gen/vector (tree->generator (second tree)) (nth tree 2) m)
              (gen/vector (tree->generator (second tree)) (nth tree 2)))
-    :* (gen/sized (fn [n] (gen/vector (tree->generator (second tree)) 0 (min n 5))))
-    :+ (gen/sized (fn [n] (gen/vector (tree->generator (second tree)) 1 (max 1 (min n 5)))))
+    :* (gen/sized (fn [n] (gen/vector (tree->generator (second tree)) 0 (min n *or-more-limit*))))
+    :+ (gen/sized (fn [n] (gen/vector (tree->generator (second tree)) 1
+                                      (max 1 (min n *or-more-limit*)))))
     :? (gen/one-of [(gen/return "") (tree->generator (second tree))])
     :alt (gen/one-of (map tree->generator (rest tree)))
     :set (gen/elements (charset (rest tree)))
