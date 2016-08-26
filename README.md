@@ -17,12 +17,14 @@ The clojure.spec library is new in Clojure 1.9, currently available as a pre-rel
 (require '[clojure.test.check.generators :as gen])
 
 (gen/sample (sg/string-generator #"[A-Z]{2,4}"))
+
 ;;=> ("ZOHX" "ZOXZ" "INX" "JO" "MRMZ" "TO" "PEHM" "YNK" "FJ" "JWH")
 
-
-(let [re #"fo+(bar)?"]
-	(s/exercise (s/with-gen (s/spec (s/and string? #(re-matches re %)))
-                         #(sg/string-generator re))))
+(s/def ::foobar (let [re #"fo+(bar)?"] 
+                   (s/spec (s/and string? #(re-matches re %))
+                           :gen  #(sg/string-generator re))))
+						   
+(s/exercise ::foobar)
 
 ;;=> (["fo" "fo"] ["fobar" "fobar"] ["fo" "fo"] ["foo" "foo"] ["foooo" "foooo"] 
 ["fooo" "fooo"] ["fo" "fo"] ["foobar" "foobar"] ["fooooobar" "fooooobar"] 
