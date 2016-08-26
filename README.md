@@ -27,8 +27,8 @@ The clojure.spec library is new in Clojure 1.9, currently available as a pre-rel
 (s/exercise ::foobar)
 
 ;;=> (["fo" "fo"] ["fobar" "fobar"] ["fo" "fo"] ["foo" "foo"] ["foooo" "foooo"] 
-["fooo" "fooo"] ["fo" "fo"] ["foobar" "foobar"] ["fooooobar" "fooooobar"] 
-["fooooobar" "fooooobar"])
+;;    ["fooo" "fooo"] ["fo" "fo"] ["foobar" "foobar"] ["fooooobar" "fooooobar"] 
+;;    ["fooooobar" "fooooobar"])
 
 ```
  
