@@ -45,7 +45,8 @@ ask for something, I might work on it.
 [re]: http://en.wikipedia.org/wiki/Regular_expression
 
 When generating X-or-more items, the generator limits the number of items to a reasonably
-small limt (less than 10).  I should allow the user more control over this.
+small limit.  You can control this with the dynamic var `miner.strgen/*or-more-limit*` which
+defaults to 9.
 
 
 ## Related Projects
