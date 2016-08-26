@@ -47,8 +47,7 @@
 (defn parse-set-contents [cs result]
   ;;(println "parse-set-contents  " result "  " (first cs))
   (case (first cs)
-    nil (throw (ex-info "Unterminated [set]" {:error :unterminated-set :partial result
-                                              :remaining cs}))
+    nil (throw (ex-info "Unterminated [set]" {:error :unterminated-set :partial result}))
     \] (if (not (seq result))
          (recur (rest cs) (conj result \]))
          [(list* :set result) (rest cs)])
@@ -70,7 +69,7 @@
 
 ;; parse {N,M} where { is already consumed
 ;; but ,M is optional
-;; very subtle distinction between exactly {N} no comma, and N-or-more {N,}
+;; Note subtle distinction between exactly {N} no comma, and N-or-more {N,}
 ;; For purposes of gen, we cap unspecified N-or-more at (+ N *or-more-limit*)
 
 ;; returns vector of [N, M (possibly nil), rest-of-cs]
@@ -94,11 +93,17 @@
      \^ (if (and (empty? result) (empty? group))
           ;; ignore, but only at start of regex
           (recur (rest cs) group result)
-          (throw (ex-info "Unexpected ^ found" {:error :caret :partial result :remaining cs})))
+          (throw (ex-info "Unexpected ^ found"
+                          {:error :caret
+                           :partial (if (empty? result) group (conj result group))
+                           :remaining (apply str cs)})))
      \$ (if (empty? (rest cs))
           ;; ignore, but only at end of regex
           (recur (rest cs) group result)
-          (throw (ex-info "Unexpected $ found" {:error :dollar :partial result :remaining cs})))
+          (throw (ex-info "Unexpected $ found"
+                          {:error :dollar
+                           :partial (if (empty? result) group (conj result group))
+                           :remaining (apply str cs)})))
      \( (recur (rest cs) [] (conj result group))
      \) (recur (rest cs) (conj (peek result) group) (pop result))
      \[ (let [[setexp rst] (parse-set (rest cs))] (recur rst (conj group setexp) result))
