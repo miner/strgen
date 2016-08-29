@@ -34,19 +34,20 @@ The clojure.spec library is new in Clojure 1.9, currently available as a pre-rel
  
 ## Limitations
 
-Not all Java [regular expressions][re] are supported.  The basics work, including: *?+. [abc]
-[a-z] [^a] \n (a|b) \w \W \d \D \s \S x{N} x{N,} x{N,M}.  ^x$ basically ignores the leading
+Not all Java [regular expressions][re] are supported.  The basics work, including:
+x* y? z+. [abc] [a-z] [^a] \n (a|b) \w \W \d \D \s \S x{N} x{N,} x{M,N}.  ^x$ ignores the leading
 ^ and trailing $ as they generate no characters.  (Capture groups) and \1 style back
 references are not supported.  Character groups like [:alnum:] are not supported.  All the
 other fancy flags, quantifiers, character classes, etc. are unsupported.  In summary, if I
-couldn't use the regex feature without looking it up, I didn't support it.  If people
-ask for something, I might work on it.
+couldn't use the regex feature without looking it up, I didn't support it.  If people ask
+for something, I might work on it.
 
 [re]: http://en.wikipedia.org/wiki/Regular_expression
 
-When generating X-or-more items, the generator limits the number of items to a reasonably
-small limit.  You can control this with the dynamic var `miner.strgen/*or-more-limit*` which
-defaults to 9.
+When generating X-or-more items for regulur expressions such as #"x*" or #"y+", the
+generator limits the number of items to a reasonably small count.  You can control this with
+an optional second arg `or-more-limit` (an integer, default 9) when calling
+`string-generator`.
 
 
 ## Related Projects

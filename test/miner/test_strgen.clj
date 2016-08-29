@@ -5,14 +5,14 @@
             [miner.strgen :as sg]))
 
 
-(def ^:dynamic *exercise-limit* 2000)
+(def ^:dynamic *exercise-limit* 5000)
 
 (defn test-re
   ([re] (test-re re *exercise-limit*))
   ([re limit]
    (every? #(apply = %)
-           (s/exercise (s/with-gen (s/spec (s/and string? #(re-matches re %)))
-                         #(sg/string-generator re))
+           (s/exercise (s/spec (s/and string? #(re-matches re %))
+                               :gen #(sg/string-generator re))
                        limit))))
 
 
