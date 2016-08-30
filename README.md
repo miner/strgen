@@ -9,10 +9,16 @@ The clojure.spec library is new in Clojure 1.9, currently available as a pre-rel
 [tc]: https://github.com/clojure/test.check "test.check"
 [cs]: http://clojure.org/guides/spec
 
-## On Clojars
+## Version
 
-[![strgen on Clojars](https://img.shields.io/clojars/v/com.velisco/strgen.svg)](https://clojars.org/com.velisco/strgen
-"strgen on Clojars")
+\[com.velisco/strgen "0.1.1"]
+
+[![strgen on Clojars][shield]][st]
+
+[latest]: https://clojars.org/com.velisco/strgen/latest-version.svg "strgen on Clojars"
+[shield]: https://img.shields.io/clojars/v/com.velisco/strgen.svg "strgen on Clojars"
+[st]: https://clojars.org/com.velisco/strgen "strgen on Clojars"
+
 
 ## Usage
 
