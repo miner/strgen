@@ -11,7 +11,8 @@ The clojure.spec library is new in Clojure 1.9, currently available as a pre-rel
 
 ## On Clojars
 
-[![Clojars Project](https://img.shields.io/clojars/v/com.velisco/strgen.svg)](https://clojars.org/com.velisco/strgen)
+[![strgen on Clojars](https://img.shields.io/clojars/v/com.velisco/strgen.svg)](https://clojars.org/com.velisco/strgen
+"strgen on Clojars")
 
 ## Usage
 
