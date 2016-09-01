@@ -9,6 +9,9 @@ The clojure.spec library is new in Clojure 1.9, currently available as a pre-rel
 [tc]: https://github.com/clojure/test.check "test.check"
 [cs]: http://clojure.org/guides/spec
 
+![strgen](img/sturgeon.png)
+
+
 ## Version
 
 \[com.velisco/strgen "0.1.1"]
