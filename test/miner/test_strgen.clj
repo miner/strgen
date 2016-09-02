@@ -6,6 +6,19 @@
 
 (def ^:dynamic *exercise-limit* 5000)
 
+(def regexes [#"f.o"
+              #"f.*o+"
+              #":k[a-z]o"
+              #":k[a-z]/f\d*o+"
+              #"s[a-z]o"
+              #"s[a-z]/f\d*o+"
+              #"(foo|bar|(baz+|quux?){2})+a?b+"
+              #"((s[a-z]*)|\d+)(x[a-j]y|y[^-A-Za-z]z|pq|PQ)\w@[^A-Zaz]"
+              ;; email example from spec guide
+              #"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,63}$"
+              #"\.\?\w\[\][-.?]"])
+
+
 
 (defn test-re
   ([re] (test-re re *exercise-limit*))
@@ -14,10 +27,8 @@
            (gen/sample (sg/string-generator re) limit))))
 
 (deftest gen-regexes
-  (is (test-re #"((s[a-z]*)|\d+)(x[a-j]y|y[^-A-Za-z]z|pq|PQ)\w@[^A-Zaz]"))
-  ;; http://clojure.org/guides/spec example
-  (is (test-re #"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,63}$"))
-  (is (test-re #"\.\?\w\[\][-.?]")))
+  (doseq [re regexes]
+    (is (test-re re))))
 
 
 (defn test-spec-re
@@ -29,8 +40,7 @@
                        limit))))
 
 (deftest spec-regexes
-  (is (test-re #"((s[a-z]*)|\d+)(x[a-j]y|y[^-A-Za-z]z|pq|PQ)\w@[^A-Zaz]"))
-  ;; http://clojure.org/guides/spec example
-  (is (test-re #"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,63}$"))
-  (is (test-re #"\.\?\w\[\][-.?]")))
+  (doseq [re regexes]
+    (is (test-spec-re re))))
+
 
