@@ -23,24 +23,28 @@
 (defn test-re
   ([re] (test-re re *exercise-limit*))
   ([re limit]
-   (every? (partial re-matches re)
-           (gen/sample (sg/string-generator re) limit))))
+   (doseq [x (gen/sample (sg/string-generator re) limit)]
+     (is (re-matches re x)))))
+
+           
 
 (deftest gen-regexes
   (doseq [re regexes]
-    (is (test-re re))))
+    (test-re re)))
 
 
 (defn test-spec-re
   ([re] (test-re re *exercise-limit*))
   ([re limit]
-   (every? #(apply = %)
-           (s/exercise (s/spec (s/and string? #(re-matches re %))
-                               :gen #(sg/string-generator re))
-                       limit))))
+   (doseq [[r c] (s/exercise (s/spec (s/and string? #(re-matches re %))
+                                 :gen #(sg/string-generator re))
+                         limit)]
+     (is (= r c)))))
+
 
 (deftest spec-regexes
   (doseq [re regexes]
-    (is (test-spec-re re))))
+    (test-spec-re re)))
+
 
 
