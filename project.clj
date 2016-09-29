@@ -1,4 +1,4 @@
-(defproject com.velisco/strgen "0.1.1"
+(defproject com.velisco/strgen "0.1.2"
   :description "String generator from regular expressions, for use with Clojure test.check and spec"
   :url "https://github.com/miner/strgen"
   :deploy-repositories {"releases" :clojars}
