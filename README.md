@@ -58,7 +58,7 @@ for something, I might work on it.
 
 [re]: http://en.wikipedia.org/wiki/Regular_expression
 
-When generating X-or-more items for regulur expressions such as #"x*" or #"y+", the
+When generating X-or-more items for regular expressions such as #"x*" or #"y+", the
 generator limits the number of items to a reasonably small count.  You can control this with
 an optional second arg `or-more-limit` (an integer, default 9) when calling
 `string-generator`.
