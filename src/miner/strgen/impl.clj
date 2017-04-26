@@ -43,8 +43,7 @@
     \r '(:return)
     (\[ \] \* \+ \. \? \\ \( \)) c
     (throw (ex-info (str "Unsupported backslash char " c) {:unsupported-backslash c}))))
-  
-     
+
 (defn parse-set-contents [cs result]
   ;;(println "parse-set-contents  " result "  " (first cs))
   (case (first cs)
@@ -55,6 +54,9 @@
     \- (if (or (not (seq result)) (= \] (second cs)))
          (recur (rest cs) (conj result \-))
          (recur (rest (rest cs)) (conj (pop result) (list :btw (peek result) (second cs)))))
+    \\ (if (= \] (second cs))
+         (recur (rest cs) (conj result \\))
+         (recur (rest (rest cs)) (conj result (slash (second cs)))))
     (recur (rest cs) (conj result (first cs)))))
 
 ;; already consumed first [
@@ -182,18 +184,27 @@
 
 (def ^:private all-chars (set/union word punctuation space))
 
-
-;; really should only be called with (:btw ...)
-(defn charset-btw [tree]
-  (if (and (seq? tree) (= (first tree) :btw))
-    (apply between (rest tree))
-    (set tree)))
+(defn charset-seq [tree]
+  (if-not (seq? tree) 
+    (set tree)
+    (case (first tree)
+      :digit digits
+      :not-digit not-digits
+      :word word
+      :not-word not-word
+      :space space
+      :not-space not-space
+      :tab #{\t}
+      :newline #{\n}
+      :return #{\r}
+      :btw (apply between (rest tree))
+      (set tree))))
 
 (defn inverted [trees]
-  (apply set/difference all-chars (set (filter char? trees)) (map charset-btw (filter seq? trees))))
+  (apply set/difference all-chars (set (filter char? trees)) (map charset-seq (filter seq? trees))))
 
 (defn charset [trees]
-  (apply set/union (set (filter char? trees)) (map charset-btw (filter seq? trees))))
+  (apply set/union (set (filter char? trees)) (map charset-seq (filter seq? trees))))
 
 (defn seq->generator [tree]
   (case (first tree)
