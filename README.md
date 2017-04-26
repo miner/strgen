@@ -4,7 +4,7 @@ A Clojure library with a test.check generator that generates strings from regula
 expressions.  Use `miner.strgen/string-generator` with [test.check][tc] and [clojure.spec][cs].  
 
 The clojure.spec library is new in Clojure 1.9, currently available as a pre-release version
-1.9.0-alpha13.
+1.9.0-alpha15.
 
 [tc]: https://github.com/clojure/test.check "test.check"
 [cs]: http://clojure.org/guides/spec
@@ -14,7 +14,7 @@ The clojure.spec library is new in Clojure 1.9, currently available as a pre-rel
 
 ## Version
 
-\[com.velisco/strgen "0.1.2"]
+\[com.velisco/strgen "0.1.3"]
 
 [![strgen on Clojars][shield]][st]
 
