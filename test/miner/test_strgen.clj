@@ -1,7 +1,7 @@
 (ns miner.test-strgen
   (:require [clojure.test :refer [deftest is]]
             [clojure.test.check.generators :as gen]
-            [clojure.spec :as s]
+            [clojure.spec.alpha :as s]
             [miner.strgen :as sg]))
 
 (def ^:dynamic *exercise-limit* 5000)
