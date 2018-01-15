@@ -31,7 +31,7 @@
    (doseq [x (gen/sample (sg/string-generator re) limit)]
      (is (re-matches re x)))))
 
-           
+
 
 (deftest gen-regexes
   (doseq [re regexes]
