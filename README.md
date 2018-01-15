@@ -3,8 +3,7 @@
 A Clojure library with a test.check generator that generates strings from regular
 expressions.  Use `miner.strgen/string-generator` with [test.check][tc] and [clojure.spec][cs].  
 
-The clojure.spec library is new in Clojure 1.9, currently available as a pre-release version
-1.9.0-alpha16.
+The clojure.spec library is new in Clojure 1.9.
 
 [tc]: https://github.com/clojure/test.check "test.check"
 [cs]: http://clojure.org/guides/spec
@@ -14,7 +13,7 @@ The clojure.spec library is new in Clojure 1.9, currently available as a pre-rel
 
 ## Version
 
-\[com.velisco/strgen "0.1.4"]
+\[com.velisco/strgen "0.1.5"]
 
 [![strgen on Clojars][shield]][st]
 
@@ -75,7 +74,7 @@ generator.
 
 ## License
 
-Copyright © 2016 Stephen E. Miner
+Copyright © 2016-2017 Stephen E. Miner
 
 Distributed under the Eclipse Public License, same as Clojure.
 
