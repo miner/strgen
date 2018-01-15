@@ -63,7 +63,7 @@
 (defn parse-set [cs]
   (case (first cs)
     \^ (let [[setexp rst] (parse-set-contents (rest cs) [])]
-         [(list* :inverted (rest setexp)) rst])    
+         [(list* :inverted (rest setexp)) rst])
     (parse-set-contents cs [])))
 
 (defn read-digits [ds]
@@ -139,7 +139,7 @@
 (defn regroup-alt [coll]
   ;;DEBUG
   ;(println "REGROUP ALT:" coll)
-  
+
   (loop [cs coll pre [] mid nil post nil]
     (if post
       (cond (empty? cs) (list* :alt pre (conj mid post))
@@ -167,7 +167,7 @@
 (defn between [ch-begin ch-end]
   ;; inclusive
   (set (map char (range (long ch-begin) (inc (long ch-end))))))
-  
+
 
 ;; all these char ranges need double checking
 (def ^:private digits #{\0 \1 \2 \3 \4 \5 \6 \7 \8 \9})
@@ -185,7 +185,7 @@
 (def ^:private all-chars (set/union word punctuation space))
 
 (defn charset-seq [tree]
-  (if-not (seq? tree) 
+  (if-not (seq? tree)
     (set tree)
     (case (first tree)
       :digit digits
@@ -264,8 +264,8 @@
   more information about the supported regular expression syntax.)  The optional
   `or-more-limit` controls the maximum numbers of elements that are generated when matching
   a potentially unbounded regex (such as #\"x*\" or #\"y+\").  The default is 9."
-  
-  ([regex] 
+
+  ([regex]
    ;; r/flatten is somewhat faster than clojure.core/flatten
    (gen/fmap #(if (coll? %) (apply str (into [] (r/flatten %))) (str %))
              (tree->generator (parse regex))))
