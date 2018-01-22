@@ -1,12 +1,17 @@
 (ns miner.test-strgen
-  (:require [clojure.test :refer [deftest is]]
+  (:require
+   #?(:cljs [cljs.test :refer-macros [deftest is testing run-tests]]
+      :clj  [clojure.test :refer [deftest is]])
             [clojure.test.check.generators :as gen]
             [clojure.spec.alpha :as s]
             [miner.strgen :as sg]))
 
+;; https://github.com/bensu/doo -- need a test runner for CLJS
+
 (def ^:dynamic *exercise-limit* 5000)
 
 (def regexes [#"f.o"
+              #"foo/bar"
               #"f.*o+"
               #":k[a-z]o"
               #":k[a-z]/f\d*o+"
@@ -42,14 +47,12 @@
   ([re] (test-re re *exercise-limit*))
   ([re limit]
    (doseq [[r c] (s/exercise (s/spec (s/and string? #(re-matches re %))
-                                 :gen #(sg/string-generator re))
-                         limit)]
+                                     :gen #(sg/string-generator re))
+                             limit)]
      (is (= r c)))))
 
 
 (deftest spec-regexes
   (doseq [re regexes]
     (test-spec-re re)))
-
-
 
