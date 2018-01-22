@@ -1,6 +1,6 @@
 (ns miner.strgen.impl
   (:require [clojure.set :as set]
-            [clojure.core.reducers :as r]
+            #?(:cljs cljs.reader)
             [clojure.test.check.generators :as gen]))
 
 ;; All of this is considered private
@@ -41,7 +41,7 @@
     \t '(:tab)
     \n '(:newline)
     \r '(:return)
-    (\[ \] \* \+ \. \? \\ \( \)) c
+    (\[ \] \* \+ \. \? \\ \( \) \/) c
     (throw (ex-info (str "Unsupported backslash char " c) {:unsupported-backslash c}))))
 
 (defn parse-set-contents [cs result]
@@ -68,7 +68,8 @@
 
 (defn read-digits [ds]
   (when (seq ds)
-    (Long/parseLong (apply str ds))))
+    #?(:clj  (Long/parseLong (apply str ds))
+       :cljs (cljs.reader/read-string (apply str ds)))))
 
 ;; parse {N,M} where { is already consumed
 ;; but ,M is optional
@@ -154,20 +155,31 @@
 ;; SEM -- probably don't need to regroup alts within (:set ...) or (:inverted ...), etc.
 ;; really only within vectors I think
 
+(defn regex-seq [regex]
+  (if (string? regex)
+    (seq regex)
+    #?(:clj (seq (str regex))
+       :cljs (drop-last (rest (seq (str regex)))))))
+
 ;; regex can be either a string or a regex
 (defn parse [regex]
   (try
-    (regroup-alt (parse-chars (seq (if (string? regex) regex (str regex)))))
-    (catch clojure.lang.ExceptionInfo e (throw e))
-    (catch Exception e (throw (ex-info (str "Confused by regular expression: " regex)
-                                       {:failed regex})))))
+    (regroup-alt (parse-chars (regex-seq regex)))
+    #?(:clj (catch clojure.lang.ExceptionInfo e (throw e)))
+    #?(:clj (catch Exception e (throw (ex-info (str "Confused by regular expression: " regex)
+                                               {:failed regex}))))
+    #?(:cljs (catch :default e (throw (ex-info (str "Confused by regular expression: " regex)
+                                               {:failed regex}))))
+    ))
 
 (declare tree->generator)
 
+(defn ascii [ch]
+  #?(:clj  (long ch)
+     :cljs (.charCodeAt ch 0)))
+
 (defn between [ch-begin ch-end]
-  ;; inclusive
-  (set (map char (range (long ch-begin) (inc (long ch-end))))))
-  
+  (set (map char (range (ascii ch-begin) (inc (ascii ch-end))))))
 
 ;; all these char ranges need double checking
 (def ^:private digits #{\0 \1 \2 \3 \4 \5 \6 \7 \8 \9})
@@ -255,7 +267,8 @@
         (seq? tree) (seq->generator tree)
         (char? tree) (gen/return tree)
         (string? tree) (gen/return tree)
-        :else (throw (ex-info (str "Unimplemented generator for " tree) {:unimplemented tree}))))
+        :else (throw (ex-info (str "Unimplemented generator for " (pr-str tree))
+                              {:unimplemented tree}))))
 
 ;; this is the only function needed for the public side
 (defn string-generator
@@ -266,8 +279,7 @@
   a potentially unbounded regex (such as #\"x*\" or #\"y+\").  The default is 9."
   
   ([regex] 
-   ;; r/flatten is somewhat faster than clojure.core/flatten
-   (gen/fmap #(if (coll? %) (apply str (into [] (r/flatten %))) (str %))
+   (gen/fmap #(if (coll? %) (apply str (flatten %)) (str %))
              (tree->generator (parse regex))))
 
   ([regex or-more-limit]
