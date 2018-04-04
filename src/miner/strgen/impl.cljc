@@ -41,7 +41,7 @@
     \t '(:tab)
     \n '(:newline)
     \r '(:return)
-    (\[ \] \* \+ \. \? \\ \( \) \/) c
+    (\[ \] \* \+ \. \? \\ \( \) \/ \$ \^) c
     (throw (ex-info (str "Unsupported backslash char " c) {:unsupported-backslash c}))))
 
 (defn parse-set-contents [cs result]
