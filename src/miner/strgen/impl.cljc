@@ -41,7 +41,8 @@
     \t '(:tab)
     \n '(:newline)
     \r '(:return)
-    (\[ \] \* \+ \. \? \\ \( \) \/ \$ \^) c
+    ;; all the special characters in `parse-chars` should be literals after a backslash
+    (\[ \] \* \+ \. \? \\ \( \) \/ \$ \^ \| \{ \}) c
     (throw (ex-info (str "Unsupported backslash char " c) {:unsupported-backslash c}))))
 
 (defn parse-set-contents [cs result]
@@ -87,7 +88,7 @@
       \, (recur [] (read-digits digits) true (rest cs))
       (\0 \1 \2 \3 \4 \5 \6 \7 \8 \9) (recur (conj digits (first cs)) n comma (rest cs)))))
 
-
+;; special chars for `parse-chars` should be literals for `slash`
 (defn parse-chars
   ([cs] (parse-chars cs [] []))
   ([cs group result]
