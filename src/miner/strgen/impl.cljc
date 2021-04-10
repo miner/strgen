@@ -1,5 +1,6 @@
 (ns miner.strgen.impl
   (:require [clojure.set :as set]
+            [clojure.string :as str]
             #?(:cljs cljs.reader)
             [clojure.test.check.generators :as gen]))
 
@@ -271,7 +272,7 @@
         :else (throw (ex-info (str "Unimplemented generator for " (pr-str tree))
                               {:unimplemented tree}))))
 
-;; this is the only function needed for the public side
+;; this is the main function needed for the public side
 (defn string-generator
   "Returns a test.check generator that generates strings matching the given regular
   expression `regex`.  (Fancy flags and POXIX extensions are not suppored; see the doc for
@@ -286,3 +287,12 @@
   ([regex or-more-limit]
    (binding [*or-more-limit* or-more-limit]
      (string-generator regex))))
+
+;; also used for the public side, to implement case-insensitive generation
+(defn gen-case-insensitive [s]
+  (let [ups (str/upper-case s)
+        lows (str/lower-case s)]
+    (gen/one-of [(gen/elements [s (str/capitalize s) ups lows])
+                 (gen/fmap (fn [bs]
+                             (str/join (map (fn [b low up] (if b up low)) bs lows ups)))
+                           (gen/vector gen/boolean (count s)))])))

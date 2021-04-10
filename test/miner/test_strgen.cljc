@@ -4,6 +4,7 @@
       :clj  [clojure.test :refer [deftest is]])
             [clojure.test.check.generators :as gen]
             [clojure.spec.alpha :as s]
+            [clojure.string :as str]
             [miner.strgen :as sg]))
 
 ;; https://github.com/bensu/doo -- need a test runner for CLJS
@@ -57,4 +58,20 @@
 (deftest spec-regexes
   (doseq [re regexes]
     (test-spec-re re)))
+
+
+;; SEM FIXME: Not a complete test as we convert everything back to lowercase before
+;; matching.  Could break if we changed `regexs` to require uppercase.  We should also
+;; validate that the generator yields sensible mixed case results.
+(defn test-spec-re-case-insensitive
+  ([re] (test-re re *exercise-limit*))
+  ([re limit]
+   (doseq [[r c] (s/exercise (s/spec (s/and string? #(re-matches re (str/lower-case %)))
+                                     :gen #(sg/case-insensitive-string-generator re))
+                             limit)]
+     (is (= r c)))))
+
+(deftest spec-regexes-case-insensitive
+  (doseq [re regexes]
+    (test-spec-re-case-insensitive re)))
 
