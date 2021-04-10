@@ -1,9 +1,15 @@
 # strgen
 
 A Clojure library with a test.check generator that generates strings from regular
-expressions.  Use `miner.strgen/string-generator` with [test.check][tc] and [clojure.spec][cs].  
+expressions.  Use `miner.strgen/string-generator` with [test.check][tc] and
+[clojure.spec][cs].  
 
-The clojure.spec library is new in Clojure 1.9.
+There is also a case-insensitive variant called
+`miner.strgen/case-insensitive-string-generator` which generates strings with mixed case
+even though they were not explicitly represented as such in the regex.  This feature is
+somewhat analogous to setting the `CASE_INSENSITIVE` flag with Java regular expressions.
+
+The `clojure.spec` library is new in Clojure 1.9.
 
 [tc]: https://github.com/clojure/test.check "test.check"
 [cs]: http://clojure.org/guides/spec
@@ -13,7 +19,7 @@ The clojure.spec library is new in Clojure 1.9.
 
 ## Version
 
-\[com.velisco/strgen "0.1.8"]
+\[com.velisco/strgen "0.2.0"]
 
 [![strgen on Clojars][shield]][st]
 
@@ -26,7 +32,7 @@ The clojure.spec library is new in Clojure 1.9.
 
 ```clojure
 (require '[miner.strgen :as sg])
-(require '[clojure.spec :as s])
+(require '[clojure.spec.alpha :as s])
 (require '[clojure.test.check.generators :as gen])
 
 (gen/sample (sg/string-generator #"[A-Z]{2,4}"))
@@ -42,6 +48,12 @@ The clojure.spec library is new in Clojure 1.9.
 ;;=> (["fo" "fo"] ["fobar" "fobar"] ["fo" "fo"] ["foo" "foo"] ["foooo" "foooo"] 
 ;;    ["fooo" "fooo"] ["fo" "fo"] ["foobar" "foobar"] ["fooooobar" "fooooobar"] 
 ;;    ["fooooobar" "fooooobar"])
+
+
+(gen/sample (sg/case-insensitive-string-generator #"fo+ba[rz]"))
+
+;;=> ("FobAz" "FOBAR" "fOBaZ" "FOOBAR" "fooBaZ" "FoOOoObar" "foooBAr" "foooObAZ" "fOOOoObAz"
+;;    "fooooooooobar")
 
 ```
  
@@ -74,7 +86,7 @@ generator.
 
 ## License
 
-Copyright © 2016-2018 Stephen E. Miner
+Copyright © 2016-2021 Stephen E. Miner
 
 Distributed under the Eclipse Public License, same as Clojure.
 
