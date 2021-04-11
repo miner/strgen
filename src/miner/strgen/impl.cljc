@@ -169,9 +169,11 @@
     (regroup-alt (parse-chars (regex-seq regex)))
     #?(:clj (catch clojure.lang.ExceptionInfo e (throw e)))
     #?(:clj (catch Exception e (throw (ex-info (str "Confused by regular expression: " regex)
-                                               {:failed regex}))))
+                                               {:failed regex}
+                                               e))))
     #?(:cljs (catch :default e (throw (ex-info (str "Confused by regular expression: " regex)
-                                               {:failed regex}))))
+                                               {:failed regex}
+                                               e))))
     ))
 
 (declare tree->generator)
