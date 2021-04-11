@@ -7,5 +7,8 @@
   :dependencies [[org.clojure/clojure "1.10.3"]
                  [org.clojure/clojurescript "1.10.844"]
                  ;;[org.clojure/spec.alpha "0.2.194"]
-                 [org.clojure/test.check "1.1.0"]])
+                 [org.clojure/test.check "1.1.0"]]
+  :repositories {"sonatype-snapshot"
+                 {:url "https://oss.sonatype.org/content/repositories/snapshots"}})
+
 
