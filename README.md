@@ -19,7 +19,7 @@ The `clojure.spec` library is new in Clojure 1.9.
 
 ## Version
 
-\[com.velisco/strgen "0.2.1"]
+\[com.velisco/strgen "0.2.4"]
 
 [![strgen on Clojars][shield]][st]
 
