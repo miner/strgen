@@ -86,7 +86,7 @@ generator.
 
 ## License
 
-Copyright © 2016-2021 Stephen E. Miner
+Copyright © 2016-2022 Stephen E. Miner
 
 Distributed under the Eclipse Public License, same as Clojure.
 

@@ -1,7 +1,7 @@
 (ns miner.test-strgen
   (:require
    #?(:cljs [cljs.test :refer-macros [deftest is testing run-tests]]
-      :clj  [clojure.test :refer [deftest is]])
+      :clj  [clojure.test :refer [deftest is testing]])
             [clojure.test.check.generators :as gen]
             [clojure.spec.alpha :as s]
             [clojure.string :as str]
@@ -39,7 +39,16 @@
    (doseq [x (gen/sample (sg/string-generator re) limit)]
      (is (re-matches re x)))))
 
-           
+
+(deftest show-info
+  (testing "Show test info"
+    (println)
+    (println "  ** Test Info **")
+    (println "  StrGen" (nth (clojure.edn/read-string (slurp  "project.clj")) 2))
+    (println "  Clojure" (clojure-version))
+    (println "  Java" (System/getProperty "java.version"))
+    (println)
+    true))
 
 (deftest gen-regexes
   (doseq [re regexes]
