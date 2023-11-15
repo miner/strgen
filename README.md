@@ -19,7 +19,7 @@ The `clojure.spec` library is new in Clojure 1.9.
 
 ## Version
 
-\[com.velisco/strgen "0.2.4"]
+\[com.velisco/strgen "0.2.5"]
 
 [![strgen on Clojars][shield]][st]
 
@@ -86,7 +86,7 @@ generator.
 
 ## License
 
-Copyright © 2016-2022 Stephen E. Miner
+Copyright © 2016-2023 Stephen E. Miner
 
 Distributed under the Eclipse Public License, same as Clojure.
 
