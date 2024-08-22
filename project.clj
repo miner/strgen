@@ -4,8 +4,8 @@
   :deploy-repositories {"releases" :clojars}
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
-  :dependencies [[org.clojure/clojure "1.11.1"]
-                 [org.clojure/clojurescript "1.11.4"]
+  :dependencies [[org.clojure/clojure "1.11.4"]
+                 [org.clojure/clojurescript "1.11.132"]
                  [org.clojure/test.check "1.1.1"]]
   )
 
